@@ -1,8 +1,7 @@
 //import XMLStream from "xml-stream";
 const XMLStream = require("xml-stream");
 import * as fs from "fs";
-import * as es from "event-stream";
-import * as path from "path";
+
 
 //TODO: create a typedef package and move this declaration into it, 
 //      so that other projects can use this declaration to communicate with each others.
@@ -11,6 +10,10 @@ export type Entry = {
      * unique id of the entry in a dictionary
      */
     id: number,
+    /**
+     * title of the wiki page
+     */
+    title: string,
     /**
      * text description about the entry
      */
@@ -22,25 +25,27 @@ export type Entry = {
  * Result of this function is a Promise. See Unit test for Usage.
  * 
  */
-export async function parseWikiDump(dumpFile: string, insertEntry: (entry: Entry) => any):Promise<number> {
+export async function parseWikiDump(dumpFile: string, collectNewEntry: (entry: Entry) => Promise<any>):Promise<number> {
     console.log(`call parseWiki`);
     let xmlFile = fs.createReadStream(dumpFile);
     let count = 0;
     let promisses = new Promise<number>((resolve, reject) => {
         let xml = new XMLStream(xmlFile);
         xml.preserve('text', true);
-        xml.on("endElement: page", (element: any) => {           
-            let ns = element["ns"];
+        xml.on("endElement: page", async (page: any) => {           
+            let ns = page["ns"];
             if (ns === '0') {
                 ++count;
-                let title = Number.parseInt(element["id"]);
-                let originText = element["revision"]["text"]["$children"];
+                let id = Number.parseInt(page["id"]);
+                let title = page["title"];
+                let originText = page["revision"]["text"]["$children"];
                 try {
                     let text = joinText(originText);                    
-                    insertEntry({
-                        id: title,
+                    await collectNewEntry({
+                        id: id,
+                        title: title,
                         text: text
-                    });
+                    });                    
                 } catch (ex) {                    
                     reject(ex);
                 }

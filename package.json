@@ -37,8 +37,10 @@
 		"typescript": "^3.6.4"
 	},
 	"dependencies": {
+		"@types/better-sqlite3": "^5.4.0",
 		"@types/event-stream": "^3.3.34",
 		"@types/sqlite3": "^3.1.6",
+		"better-sqlite3": "^5.4.3",
 		"event-stream": "^4.0.1",
 		"nedb": "^1.8.0",
 		"sql-template-strings": "^2.2.2",

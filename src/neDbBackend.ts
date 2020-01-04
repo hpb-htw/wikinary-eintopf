@@ -2,6 +2,7 @@ import { Entry } from "./wiktionary";
 import * as Datastore from "nedb";
 
 
+
 let db: Datastore;
 
 export function initDb (filename:string) {
@@ -21,4 +22,20 @@ export function insertEntry(entries: Entry[]):Promise<number> {
             }
         });
     });
+}
+
+export function verify(): Promise<number> {
+    return new Promise( (resolve, rejects)=> {
+        db.count({}, (err, count)=>{
+            if(err) {
+                rejects(err);
+            }else {
+                resolve(count);
+            }
+        });
+    });
+}
+
+export function done(): Promise<any> {
+    return new Promise(()=>"done");
 }
