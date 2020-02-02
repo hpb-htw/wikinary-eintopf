@@ -45,7 +45,7 @@ export async function parseWikiDump(dumpFile: string, collectNewEntry: (entry: E
                         id: id,
                         title: title,
                         text: text
-                    });                    
+                    });
                 } catch (ex) {                    
                     reject(ex);
                 }

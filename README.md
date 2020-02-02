@@ -35,5 +35,6 @@ This package works *per-design* only with the German dump file. There are two re
 this design:
 
 1. „dxtionary“ is designed to help me writing German text.
-2. Size is matter. „dxtionary“ is design to work offline, so it must access an offline database. A big Database is –in my opinion– not a good deal by distributing an extension.
+2. Size is matter. „dxtionary“ is design to work offline, so it must access an offline database. 
+A big Database is –in my opinion– not a good deal by distributing an extension.
 

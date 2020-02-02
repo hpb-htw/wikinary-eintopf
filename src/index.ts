@@ -27,29 +27,44 @@ function initDb3(filename: string) {
 
 
 const bufferSize = 1024;
+const RANDOM_FACTOR = 1024;
 
 let insertEntries: (en: Entry[]) => Promise<number> = backend.insertEntry;
 //let insertEntries: (en: Entry[]) => number = (en: Entry[]) => en.length;
 let verify: () => Promise<number> = backend.verify;
 //let verify:() => number = () => 0;
 
+function collectEachThirdEntry(index:number, entry: Entry) {
+    return index % 3 === 0;
+}
 
-async function importDic(xmlPath: string): Promise<number> {
+function collectEachNthEntryFn(n:number): (i:number, e:Entry)=>boolean {
+    return function(index:number, entry: Entry):boolean {
+        return index % n === 0;
+    };
+}
+
+async function importDic(xmlPath: string, chooserFn?:(index:number, entry:Entry)=>boolean): Promise<number> {
     let buffer: Entry[] = [];
     let countGermanWords = 0;
     let savedEntries = 0;
+    let effectiveChooser = chooserFn?chooserFn : (index:number, entry:Entry) => true;
     console.log(`enter`);
     return await parseWikiDump(xmlPath, async (entry: Entry) => {
         if (isGermanWord(entry)) {
-            buffer.push(entry);
             ++countGermanWords;
-            //++bufferLength;
-            if (buffer.length === bufferSize) {                
-                let cache: Entry[] = buffer;                
-                buffer = [];
-                let r = await insertEntries(cache);                
-                savedEntries += r;
-                console.log({ countGermanWords, savedEntries, r });
+            if( effectiveChooser(countGermanWords, entry) ){
+                let stringifyText = JSON.stringify(entry.text);
+                entry.text = stringifyText;
+                buffer.push(entry);
+                //++bufferLength;
+                if (buffer.length === bufferSize) {                
+                    let cache: Entry[] = buffer;                
+                    buffer = [];
+                    let r = await insertEntries(cache);                      
+                    savedEntries += r;
+                    console.log({ countGermanWords, savedEntries, r });
+                }
             }
         }
     }).then((countResultFromParseWikiDump) => {
@@ -85,12 +100,13 @@ function checkFile(processArgv: string[]): [string, string] {
 }
 
 function main() {
+    let chooser = collectEachNthEntryFn(1000);
     try {        
         let files = checkFile(process.argv);
         console.log(`     xml file: ${files[0]}`);
         console.log(`database file: ${files[1]}`);
         initDb3(files[1]);
-        importDic(files[0])
+        importDic(files[0], chooser)
             .then((countGermanWords) => {
                 console.log({ countGermanWords });
             })
