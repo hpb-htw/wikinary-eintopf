@@ -3,3 +3,4 @@ node_modules
 coverage
 big-file
 dummy*
+*-articles.db
