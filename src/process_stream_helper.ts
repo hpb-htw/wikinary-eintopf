@@ -37,13 +37,13 @@ export function chomp(line: string): string {
 
 //---------- Tools for child processes
 
-export function onExit(childProcess: ChildProcess): Promise<void> {
+export function onExit(childProcess: ChildProcess): Promise<undefined|Error> {
     return new Promise((resolve, reject) => {
-        childProcess.once('exit', (code: number, signal: string) => {
+        childProcess.once('exit', (code: number, signal: string) => {            
             if (code === 0) {
                 resolve(undefined);
             } else {
-                reject(new Error('Exit with error code: ' + code));
+                reject(new Error('' + code));
             }
         });
         childProcess.once('error', (err: Error) => {
