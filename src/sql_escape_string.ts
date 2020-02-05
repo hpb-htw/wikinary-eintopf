@@ -41,7 +41,7 @@ const CHARS_ESCAPE_BACKSLASH_SUPPORTED_MAP = {
 export function escapeString(val: string, opts?: any):string {
     if (val === null) {
         throw new Error('Need to pass a valid string');
-    }    
+    }
     opts = opts || {};
     const backslashSupported = !!opts.backslashSupported;    
     if (!backslashSupported) { return "'" + val.replace(/'/g, "''") + "'"; }

@@ -1,19 +1,26 @@
 import * as path from "path";
 
 import {WikiDictionary} from "../wiktionary_dict";
-import { Entry} from "../dictionary";
+import {Entry, EntryFormater} from "../dictionary";
 
 const WIKI_DICT_CONFIG = {
     executable : "../../../dxtionary-db/clang-build/src/dxtionary-db",
     database: "../../../big-file/dict.sqlite",
 };
 
-function makeCountingMapper(initCount: number = 0): (word: string, entries: Entry[])=>string {
-    let count = initCount;
-    return function(word: string, entries: Entry[]) {
-        count += entries.length;
-        return `Number of entries of „${word}“ is ${count}\n`;
-    };
+class EntryCounter implements EntryFormater {
+
+    count: number = 0;
+
+    accumulate(e: Entry): void {
+        this.count += 1;
+    }    
+    
+    serialize(): string {
+        return `${this.count}`;
+    }
+
+
 }
 
 test("Query a text", async () => {
@@ -21,7 +28,8 @@ test("Query a text", async () => {
     let executable = path.resolve(__dirname, WIKI_DICT_CONFIG.executable);
     
     let dict = new WikiDictionary(executable, dbPath);
-    dict.entryMapper = makeCountingMapper(0);
+    dict.formater = new EntryCounter;
     let result = await dict.query("ich");
-    expect(result).toBe("ich");
+    expect(result).toBe("50");
 });
+

@@ -16,6 +16,9 @@ export const idMap = (word: string, entries: Entry[]) =>
     `${word}\n${entries.map(e => e.text).join('\n')}`;
 
 export interface Dictionary {
+
+    formater : EntryFormater ;
+
     /**
      * 
      * @param word searching word in dictionary database
@@ -39,7 +42,23 @@ export interface Dictionary {
      * causes problems.
      */
     close(): Promise<any>;
+    
+}
 
-    entryMapper: (word: string, entities: Entry[]) => any ;
+
+export interface EntryFormater {
+
+    /**
+     *  
+     * Accumulate an entry. Implementation can process this entry on-the-fly 
+     * or saved it in a cache and process it later in context of other entry.
+     * This method is called for each found entries in conjunction with a word.
+    */
+    accumulate(e: Entry): void ;
+
+    /** 
+     * returns the final result of a lookup for a word, which can be displayed
+     * */
+    serialize(): string;
 }
 
