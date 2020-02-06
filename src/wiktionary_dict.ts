@@ -59,7 +59,30 @@ export class WikiDictionary implements Dictionary {
     }
 }
 
-
+export async function executeSql2<R>(
+            sqlite3CliCmd: string, 
+            sqlite3Argv: string[], 
+            stdoutCapture: (lines: AsyncIterable<string>) => Promise<R> 
+): Promise<R> {
+    const source = spawn(sqlite3CliCmd, sqlite3Argv, {
+        stdio: ['ignore', 'pipe', 'pipe']
+    });
+    let errorMsg = "";
+    try {
+        // capture std out
+        let capturedLines = await stdoutCapture(chunksToLines(source.stdout));
+        // capture std err
+        const lineAcc = (l:string) => {        
+            errorMsg += l;
+        };
+        await collectLines(chunksToLines(source.stderr), lineAcc);
+        let exit = await onExit(source);
+        return Promise.resolve(capturedLines);
+    }catch (ex) {
+        let messageObj = {exit: Number.parseInt(ex.message), stderr: errorMsg};
+        throw Error(JSON.stringify(messageObj));
+    }    
+}
 
 class PlainTextFormater implements EntryFormater {
 
@@ -103,7 +126,7 @@ async function executeSql(sqlite3CliCmd: string, sqlite3Argv: string[], fmt: Ent
         let exit = await onExit(source);
     }catch(ex) { // catch error from process
         let messageObj = {exit: Number.parseInt(ex.message), stderr: errorMsg};
-       throw Error(JSON.stringify(messageObj));
+        throw Error(JSON.stringify(messageObj));
     }
     return Promise.resolve(fmt.serialize());
 }
@@ -111,6 +134,13 @@ async function executeSql(sqlite3CliCmd: string, sqlite3Argv: string[], fmt: Ent
 
 async function* linesToEntries(lines: AsyncIterable<string>): AsyncIterable<any> {
     let cache: string[] = [];
+    function cacheToEntry(cache: string[]): Entry {
+        return {
+            id:Number.parseInt(trimHead(cache[0])),
+            title: chomp(trimHead(cache[1]).trim()),
+            text: JSON.parse(trimHead(cache[2]))
+        };
+    }
     for await (const line of lines) {
         cache.push(line);
         while (true) {
@@ -141,15 +171,9 @@ async function collectLines(lines: AsyncIterable<string>, lineAcc:(l:string)=>an
     return Promise.resolve(undefined);
 }
 
-function trimHead(text: string) {
+export function trimHead(text: string):string {
     let index = text.indexOf("=");
     return text.slice(index + 1);
 }
 
-function cacheToEntry(cache: string[]): Entry {
-    return {
-        id:Number.parseInt(trimHead(cache[0])),
-        title: chomp(trimHead(cache[1]).trim()),
-        text: JSON.parse(trimHead(cache[2]))
-    };
-}
+
