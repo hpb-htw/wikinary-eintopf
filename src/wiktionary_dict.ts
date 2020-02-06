@@ -24,17 +24,18 @@ export class WikiDictionary implements Dictionary {
     
 
     dbPath: string;
-    dxtionary_db_cmd: string;
+    dxtionaryExecutableCli: string;
 
     
     formater : EntryFormater ;
     
     /**
-     * @param dbPath path to sqlite3 Database file
+     * @param dxtionaryExecutableCli path to program `dxtionary-db`
+     * @param dbPath path to sqlite3 Database file (mostly `dict.sqlite`)
      */
-    constructor(sqlite3CliCmd: string, dbPath: string) {
+    constructor(dxtionaryExecutableCli: string, dbPath: string) {
         this.dbPath = dbPath;
-        this.dxtionary_db_cmd = sqlite3CliCmd;
+        this.dxtionaryExecutableCli = dxtionaryExecutableCli;
         this.formater = new PlainTextFormater();
     }
 
@@ -42,7 +43,7 @@ export class WikiDictionary implements Dictionary {
         let escapeWord = plainEscape(word);
         const selectCmd = SQL_SELECT.byTitle.replace("@word", escapeWord);        
         const sqliteArgv: string[] = [this.dbPath, selectCmd];        
-        return executeSql(this.dxtionary_db_cmd, sqliteArgv, this.formater);
+        return executeSql(this.dxtionaryExecutableCli, sqliteArgv, this.formater);
     }
 
     save(entry: Entry): Promise<any> {
@@ -86,21 +87,21 @@ async function executeSql(sqlite3CliCmd: string, sqlite3Argv: string[], fmt: Ent
     const source = spawn(sqlite3CliCmd, sqlite3Argv, {
         stdio: ['ignore', 'pipe', 'pipe']
     });
-    // capture std out
-    const acc = (e:Entry) => fmt.accumulate(e) ;
-    await collectEntries(linesToEntries(chunksToLines(source.stdout)), acc);
 
-    // capture std err
     let errorMsg = "";
-    const lineAcc = (l:string) => {        
-        errorMsg += l;
-    };
-    await collectLines(chunksToLines(source.stderr), lineAcc);
-
-    // catch error
+    
     try{
+        // capture std out
+        const acc = (e:Entry) => fmt.accumulate(e) ;
+        await collectEntries(linesToEntries(chunksToLines(source.stdout)), acc);
+
+        // capture std err
+        const lineAcc = (l:string) => {        
+            errorMsg += l;
+        };
+        await collectLines(chunksToLines(source.stderr), lineAcc);
         let exit = await onExit(source);
-    }catch(ex) {
+    }catch(ex) { // catch error from process
         let messageObj = {exit: Number.parseInt(ex.message), stderr: errorMsg};
        throw Error(JSON.stringify(messageObj));
     }
@@ -147,7 +148,7 @@ function trimHead(text: string) {
 
 function cacheToEntry(cache: string[]): Entry {
     return {
-        id: Number.parseInt(trimHead(cache[0])),
+        id:Number.parseInt(trimHead(cache[0])),
         title: chomp(trimHead(cache[1]).trim()),
         text: JSON.parse(trimHead(cache[2]))
     };

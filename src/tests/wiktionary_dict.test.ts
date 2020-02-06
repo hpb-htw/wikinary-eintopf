@@ -20,7 +20,6 @@ class EntryCounter implements EntryFormater {
         return `${this.count}`;
     }
 
-
 }
 
 test("Query a text", async () => {
@@ -33,8 +32,7 @@ test("Query a text", async () => {
         let result = await dict.query("ich");
         expect(result).toBe("50");
     }catch(ex) {
-        // TODO: test this part
-        // if error happend it should have a stringified error message
+        fail(ex);
     }
 });
 
