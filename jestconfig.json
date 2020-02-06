@@ -12,5 +12,6 @@
         "node"
     ],
     "collectCoverage": true,
-    "coverageReporters": ["text"]
+    "coverageReporters": ["text","json", "lcov"],
+    "coverageDirectory": "coverage"
 }

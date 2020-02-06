@@ -32,12 +32,13 @@ test("Query a text", async () => {
     try{
         let result = await dict.query("ich");
         expect(result).toBe("50");
+        return ;
     }catch(ex) {
         fail(ex);
     }
 });
 
-async function collectLines(lines:AsyncIterable<string>): Promise<object[]> {
+async function linesToTitle(lines:AsyncIterable<string>): Promise<object[]> {
     let cache:string[] = [];
     let objects:{title:string}[] = [];
 
@@ -56,14 +57,14 @@ async function collectLines(lines:AsyncIterable<string>): Promise<object[]> {
 test("collect only title", async () =>{
     let executable = WIKI_DICT_CONFIG.executable;
     let dbPath = WIKI_DICT_CONFIG.database;    
-    let sql = `SELECT title FROM dewiktionary LIMIT 50;`;
+    let sql = `SELECT title FROM dewiktionary ORDER BY title LIMIT 50;`;
     try{
-        let lines = await executeSql2(executable, [dbPath, sql], collectLines);
-        lines.forEach( l => {
-            console.log(`62: ${JSON.stringify(l)}`);
-        });
-        console.log(`64: ${lines.length}`);
+        let lines = await executeSql2(executable, [dbPath, sql], linesToTitle);
+        expect(lines).toHaveLength(50);
     }catch(ex) {
         throw ex;
     }
 });
+
+
+
