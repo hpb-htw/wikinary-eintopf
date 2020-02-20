@@ -1,4 +1,4 @@
-{
+module.exports =  {
     "transform": {
         "^.+\\.(t|j)sx?$": "ts-jest"
     },
@@ -11,7 +11,9 @@
         "json",
         "node"
     ],
+/*
     "collectCoverage": true,
     "coverageReporters": ["text","json", "lcov"],
     "coverageDirectory": "coverage"
+ */
 }

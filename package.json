@@ -3,6 +3,7 @@
 	"version": "0.0.1",
 	"description": "process wiktionary dump files",
 	"main": "./lib/index.js",
+	"type": "./lib/index.d.ts",
 	"bin": {
 		"wikinary-eintopf": "./lib/index.js"
 	},
@@ -16,7 +17,7 @@
 		"watch": "tsc -watch -p ./",
 		"run": "npm run compile ; node lib/index.js",
 		"refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
-		"test": "jest --config jestconfig.json",
+		"test": "jest --config jest.config.js",
 		"lint": "tslint -p tsconfig.json"
 	},
 	"author": "hpb HTW",
