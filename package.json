@@ -3,20 +3,15 @@
 	"version": "0.0.1",
 	"description": "process wiktionary dump files",
 	"main": "./lib/index.js",
-	"type": "./lib/index.d.ts",
-	"bin": {
-		"wikinary-eintopf": "./lib/index.js"
-	},
+	"types": "./lib/index.d.ts",
 	"files": [
 		"lib/**/*"
 	],
 	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"clean": "rm -rf lib",
+		"compile": "make all",
+		"clean": "make clean",
 		"watch": "tsc -watch -p ./",
-		"run": "npm run compile ; node lib/index.js",
-		"refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
+		"refresh": "make refresh",
 		"test": "jest --config jest.config.js",
 		"lint": "tslint -p tsconfig.json"
 	},
@@ -24,7 +19,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git://notset.host/path"
+		"url": "https://github.com/hpb-htw/wikinary-eintopf.git"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.1",

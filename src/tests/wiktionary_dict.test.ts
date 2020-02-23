@@ -1,7 +1,7 @@
 import * as path from "path";
 
 import {WikiDictionary, executeSql2, trimHead} from "../wiktionary_dict";
-import {Entry, EntryFormater} from "../dictionary";
+import {Entry, EntryFormatter} from "../dictionary";
 import { chomp } from "../process_stream_helper";
 
 const WIKI_DICT_CONFIG = {
@@ -9,7 +9,7 @@ const WIKI_DICT_CONFIG = {
     database: path.resolve(__dirname, "../../../big-file/dict.sqlite"),
 };
 
-class EntryCounter implements EntryFormater {
+class EntryCounter implements EntryFormatter {
 
     count: number = 0;
 

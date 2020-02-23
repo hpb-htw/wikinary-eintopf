@@ -17,7 +17,7 @@ export const idMap = (word: string, entries: Entry[]) =>
 
 export interface Dictionary {
 
-    formater : EntryFormater ;
+    formater : EntryFormatter ;
 
     /**
      * 
@@ -46,7 +46,7 @@ export interface Dictionary {
 }
 
 
-export interface EntryFormater {
+export interface EntryFormatter {
 
     /**
      *  

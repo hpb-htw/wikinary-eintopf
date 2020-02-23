@@ -1,7 +1,7 @@
 /** 
  * implement a dictionary to represent wiktionary
 */
-import { Entry, EntryFormater, Dictionary, idMap } from "./dictionary";
+import { Entry, EntryFormatter, Dictionary, idMap } from "./dictionary";
 import { spawn} from 'child_process';
 import { chunksToLines, chomp, onExit } from "./process_stream_helper";
 import { escapeString } from "./sql_escape_string";
@@ -27,7 +27,7 @@ export class WikiDictionary implements Dictionary {
     dxtionaryExecutableCli: string;
 
     
-    formater : EntryFormater ;
+    formater : EntryFormatter ;
     
     /**
      * @param dxtionaryExecutableCli path to program `dxtionary-db`
@@ -84,7 +84,7 @@ export async function executeSql2<R>(
     }    
 }
 
-class PlainTextFormater implements EntryFormater {
+class PlainTextFormater implements EntryFormatter {
 
     result: string = "";
 
@@ -106,7 +106,7 @@ function likeEscape(word: string): string {
     return escapeString(`%${word}%`);
 }
 
-async function executeSql(sqlite3CliCmd: string, sqlite3Argv: string[], fmt: EntryFormater ) :Promise<string> {
+async function executeSql(sqlite3CliCmd: string, sqlite3Argv: string[], fmt: EntryFormatter ) :Promise<string> {
     const source = spawn(sqlite3CliCmd, sqlite3Argv, {
         stdio: ['ignore', 'pipe', 'pipe']
     });
