@@ -17,7 +17,7 @@ export const idMap = (word: string, entries: Entry[]) =>
 
 export interface Dictionary {
 
-    formater : EntryFormatter ;
+    formatter : EntryFormatter<string> ;
 
     /**
      * 
@@ -46,7 +46,7 @@ export interface Dictionary {
 }
 
 
-export interface EntryFormatter {
+export interface EntryFormatter<T> {
 
     /**
      *  
@@ -59,6 +59,6 @@ export interface EntryFormatter {
     /** 
      * returns the final result of a lookup for a word, which can be displayed
      * */
-    serialize(): string;
+    serialize(): T;
 }
 

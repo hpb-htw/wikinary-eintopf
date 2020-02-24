@@ -15,7 +15,7 @@ const SQL_SELECT = {
         FROM dewiktionary 
         WHERE ranke < 400 
         ORDER BY ranke 
-        LIMIT 50
+        LIMIT 5
     ) SELECT id, title, text FROM entry; `.replace(/\s+/g, " ")
 };
 
@@ -27,7 +27,7 @@ export class WikiDictionary implements Dictionary {
     dxtionaryExecutableCli: string;
 
     
-    formater : EntryFormatter ;
+    formatter : EntryFormatter<string> ;
     
     /**
      * @param dxtionaryExecutableCli path to program `dxtionary-db`
@@ -36,14 +36,21 @@ export class WikiDictionary implements Dictionary {
     constructor(dxtionaryExecutableCli: string, dbPath: string) {
         this.dbPath = dbPath;
         this.dxtionaryExecutableCli = dxtionaryExecutableCli;
-        this.formater = new PlainTextFormater();
+        this.formatter = new PlainTextFormatter();
     }
 
     async query(word: string): Promise<string> {
         let escapeWord = plainEscape(word);
         const selectCmd = SQL_SELECT.byTitle.replace("@word", escapeWord);        
         const sqliteArgv: string[] = [this.dbPath, selectCmd];        
-        return executeSql(this.dxtionaryExecutableCli, sqliteArgv, this.formater);
+        return executeSql(this.dxtionaryExecutableCli, sqliteArgv, this.formatter);
+    }
+
+    async typedQuery<T>(word:string, formatter:EntryFormatter<T>): Promise<T> {
+        let escapeWord = plainEscape(word);
+        const selectCmd = SQL_SELECT.byTitle.replace("@word", escapeWord);
+        const sqliteArgv: string[] = [this.dbPath, selectCmd];
+        return executeSql(this.dxtionaryExecutableCli, sqliteArgv, formatter);
     }
 
     save(entry: Entry): Promise<any> {
@@ -84,7 +91,7 @@ export async function executeSql2<R>(
     }    
 }
 
-class PlainTextFormater implements EntryFormatter {
+class PlainTextFormatter implements EntryFormatter<string> {
 
     result: string = "";
 
@@ -93,7 +100,7 @@ class PlainTextFormater implements EntryFormatter {
     }    
     
     serialize(): string {
-        throw new Error("Method not implemented.");
+        return this.result;
     }
 }
 
@@ -106,7 +113,7 @@ function likeEscape(word: string): string {
     return escapeString(`%${word}%`);
 }
 
-async function executeSql(sqlite3CliCmd: string, sqlite3Argv: string[], fmt: EntryFormatter ) :Promise<string> {
+async function executeSql<T>(sqlite3CliCmd: string, sqlite3Argv: string[], fmt: EntryFormatter<T> ) :Promise<T> {
     const source = spawn(sqlite3CliCmd, sqlite3Argv, {
         stdio: ['ignore', 'pipe', 'pipe']
     });
@@ -135,10 +142,16 @@ async function executeSql(sqlite3CliCmd: string, sqlite3Argv: string[], fmt: Ent
 async function* linesToEntries(lines: AsyncIterable<string>): AsyncIterable<any> {
     let cache: string[] = [];
     function cacheToEntry(cache: string[]): Entry {
+        let text = trimHead(cache[2]);
+        try{
+            JSON.parse(text);
+        }catch (e) {
+            throw new Error( `title: ${cache[0]}` + e.message);
+        }
         return {
             id:Number.parseInt(trimHead(cache[0])),
             title: chomp(trimHead(cache[1]).trim()),
-            text: JSON.parse(trimHead(cache[2]))
+            text: trimHead(cache[2])
         };
     }
     for await (const line of lines) {
