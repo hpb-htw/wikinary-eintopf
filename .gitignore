@@ -4,3 +4,4 @@ coverage
 big-file
 dummy*
 *-articles.db
+.idea
