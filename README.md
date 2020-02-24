@@ -44,7 +44,7 @@ This type of usage covers almost all use-case. Once can implement his own format
 instance of `Entry` instantly to JSON-String or to XML-String or whatever suits his use-case. 
 
 Implementing an `EntryFormater<string>` is very simple, for example, to convert all entries
-to a (very long) validate JSON-String, once can write as follow:
+to a (very long) validate JSON-String, one can write as follow:
 
 
 ```typescript
@@ -73,7 +73,7 @@ class JSONStringFormatter implements EntryFormatter<string> {
 This use-case is less common than the use-case above, but gives users more flexibility.
 
 To make a typed query, also result should not be a string, but be formatted in a expected type,
-once can use `typedQuery`, which looks like:
+one can use `typedQuery`, which looks like:
 
 ```typescript
 // Prepare as above
