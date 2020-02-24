@@ -20,7 +20,6 @@ class EntryCounter implements EntryFormatter {
     serialize(): string {
         return `${this.count}`;
     }
-
 }
 
 test("Query a text", async () => {

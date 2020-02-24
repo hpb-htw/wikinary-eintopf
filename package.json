@@ -12,7 +12,7 @@
 		"clean": "make clean",
 		"watch": "tsc -watch -p ./",
 		"refresh": "make refresh",
-		"test": "jest --config jest.config.js",
+		"test": "make test",
 		"lint": "tslint -p tsconfig.json"
 	},
 	"author": "hpb HTW",

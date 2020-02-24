@@ -4,10 +4,9 @@ Tool to convert CSV Version of the German Wiktionary dump file to Sqlite databas
 A Complement for the Visual Studio Code Extension „dxtionary“ extension.
 
 This tool is used in „dxtionary“ to access German Wiktioanry in form of a Sqlite Database.
-To create the Sqlite Databse, this tool needs a CSV file, which is the output of the 
-sibling project `de-wiktionary-parser`. See `de-wiktionary-parser/README.md`
-to get Information how to create such a CSV File. (CSV is just a convention, it does NOT use
-a `,` to separate columns, but uses the token `<separator>`.) 
+
+* To make a CSV Version of the German Wiktionary dump file read `de-wiktionary-parser/README.md`
+* To make a Sqlite Database file from the CSV file read `dxtionary-db/README.md`  
 
 ## Install
 To install just do

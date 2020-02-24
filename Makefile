@@ -1,5 +1,6 @@
 MAIN=lib/index.js
 SRC_TS=$(wildcard src/*.ts)
+TEST_TS=$(wildcard src/tests/*.ts)
 
 .PHONY:all
 all: main
@@ -10,6 +11,9 @@ main: $(MAIN)
 $(MAIN): $(SRC_TS)
 	tsc -p ./
 
+.PHONY:test
+test: $(SRC_TS) $(TEST_TS)
+	jest --config jest.config.js
 
 .PHONY:clean
 clean:
