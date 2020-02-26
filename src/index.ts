@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import {WikiDictionary, executeSql2} from "./wiktionary_dict";
 import {Dictionary, Entry, EntryFormatter} from "./dictionary";
 
