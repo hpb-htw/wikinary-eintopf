@@ -9,5 +9,7 @@ export {WikiDictionary, executeSql2};
 export {Dictionary, Entry, EntryFormatter};
 
 
+import * as WikiLang from './de_wiki_lang';
 
+export {WikiLang};
 

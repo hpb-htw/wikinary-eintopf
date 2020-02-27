@@ -142,13 +142,6 @@ async function executeSql<T>(sqlite3CliCmd: string, sqlite3Argv: string[], fmt: 
 async function* linesToEntries(lines: AsyncIterable<string>): AsyncIterable<any> {
     let cache: string[] = [];
     function cacheToEntry(cache: string[]): Entry {
-        /*
-        let text = trimHead(cache[2]);
-        try{
-            JSON.parse(text);
-        }catch (e) {
-            throw new Error( `title: ${cache[0]}` + e.message);
-        }*/
         return {
             id:Number.parseInt(trimHead(cache[0])),
             title: chomp(trimHead(cache[1]).trim()),
