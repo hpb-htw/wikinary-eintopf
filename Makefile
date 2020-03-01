@@ -3,7 +3,7 @@ SRC_TS=$(wildcard src/*.ts)
 TEST_TS=$(wildcard src/tests/*.ts)
 
 .PHONY:all
-all: main
+all: main test
 
 .PHONY:main
 main: $(MAIN)
@@ -13,7 +13,7 @@ $(MAIN): $(SRC_TS)
 
 .PHONY:test
 test: $(SRC_TS) $(TEST_TS)
-	jest --config jest.config.js
+	npx jest --config jest.config.js
 
 .PHONY:clean
 clean:

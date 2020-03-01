@@ -194,7 +194,7 @@ export class Body {
     grammaticalNote?: fallbackPlaintext; // for now render as plain text
 
     //   {{Bedeutungen}}
-    sense: Sense[] = [];
+    sense: Sense = new Sense();
 
     //   {{Abkürzungen}}
     abbreviations: Abbreviation[] = [];
@@ -277,14 +277,6 @@ export class SubstantivFlexion extends Flexion {
     dativ : Kasus = {singular:[], plural: []};
     akkusativ: Kasus = {singular:[], plural: []};
 
-    static testFlexion(title:string):boolean {
-        for(let subtitle of SubstantivFlexion.possibleTitle) {
-            if (title.includes(subtitle)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
 
 
@@ -293,10 +285,6 @@ export class VornameFlexion extends SubstantivFlexion {
     static title:string = "Deutsch Vorname Übersicht";
 
     static PLURAL = "Plural";
-
-    static testFlexion(title:string): boolean {
-        return title.includes(VornameFlexion.title);
-    }
 }
 
 export class ToponymFlexion extends Flexion {
@@ -311,9 +299,6 @@ export class ToponymFlexion extends Flexion {
 
 
     static title = "Deutsch Toponym Übersicht";
-    static testFlexion(titleLine:string): boolean {
-        return titleLine.trim().includes(ToponymFlexion.title);
-    }
 }
 
 
@@ -437,15 +422,74 @@ export class PersonalpronomenFlexion extends Flexion {
     ];
 
     static title = "Deutsch Pronomen Übersicht";
-
-    static testFlexion(title:string):boolean {
-        return PersonalpronomenFlexion.fixPersonalpromomen.includes(title.trim()) ||
-            title.trim().includes(PersonalpronomenFlexion.title);
-    }
 }
 
 
+type ProsessivpronomenForm = {artikel:string, deklination:string};
+type ProsessivpronomenDeklination = {
+    nominativ : [ProsessivpronomenForm, ProsessivpronomenForm, ProsessivpronomenForm, ProsessivpronomenForm],
+    genitiv   : [ProsessivpronomenForm, ProsessivpronomenForm, ProsessivpronomenForm, ProsessivpronomenForm],
+    dativ     : [ProsessivpronomenForm, ProsessivpronomenForm, ProsessivpronomenForm, ProsessivpronomenForm],
+    akkusativ : [ProsessivpronomenForm, ProsessivpronomenForm, ProsessivpronomenForm, ProsessivpronomenForm]
+};
 
+const attributivT:ProsessivpronomenDeklination = Object.freeze({
+    nominativ: [{artikel:"", deklination:""},  {artikel:"", deklination:"e"}, {artikel:"", deklination:""},  {artikel:"", deklination:"e"}],
+    genitiv  : [{artikel:"", deklination:"es"},{artikel:"", deklination:"er"},{artikel:"", deklination:"es"},{artikel:"", deklination:"er"}],
+    dativ    : [{artikel:"", deklination:"em"},{artikel:"", deklination:"er"},{artikel:"", deklination:"em"},{artikel:"", deklination:"en"}],
+    akkusativ: [{artikel:"", deklination:"en"},{artikel:"", deklination:"e"}, {artikel:"", deklination:""},  {artikel:"", deklination:"e"}]
+});
+
+const nichtAttributivT:ProsessivpronomenDeklination = Object.freeze({
+    nominativ: [{artikel:"", deklination:"er"},{artikel:"", deklination:"e"}, {artikel:"", deklination:"es"},{artikel:"", deklination:"e"}],
+    genitiv  : [{artikel:"", deklination:"es"},{artikel:"", deklination:"er"},{artikel:"", deklination:"es"},{artikel:"", deklination:"er"}],
+    dativ    : [{artikel:"", deklination:"em"},{artikel:"", deklination:"er"},{artikel:"", deklination:"em"},{artikel:"", deklination:"en"}],
+    akkusativ: [{artikel:"", deklination:"en"},{artikel:"", deklination:"e"}, {artikel:"", deklination:"es"},{artikel:"", deklination:"e"}]
+});
+
+const nichtAttributivMitArtikelT:ProsessivpronomenDeklination = Object.freeze({
+    nominativ: [{artikel:"der", deklination:"e"}, {artikel:"die", deklination:"e"}, {artikel:"das", deklination:"e"}, {artikel:"die", deklination:"en"}],
+    genitiv  : [{artikel:"des", deklination:"em"},{artikel:"der", deklination:"en"},{artikel:"des", deklination:"en"},{artikel:"der", deklination:"en"}],
+    dativ    : [{artikel:"dem", deklination:"en"},{artikel:"der", deklination:"en"},{artikel:"dem", deklination:"en"},{artikel:"den", deklination:"en"}],
+    akkusativ: [{artikel:"den", deklination:"en"},{artikel:"die", deklination:"e"}, {artikel:"das", deklination:"e"}, {artikel:"die", deklination:"en"}]
+});
+function mapTemplate(person:string, template: ProsessivpronomenDeklination): ProsessivpronomenDeklination {
+    let d = {};
+    for (let [key, value] of Object.entries(template) ) {
+        let f : ProsessivpronomenForm[] = [];
+        value.forEach( (deklination, idx) => {
+           f.push({
+               artikel: deklination.artikel,
+               deklination: person + deklination.deklination
+           });
+        });
+        // @ts-ignore
+        d[key] = f;
+    }
+    return <ProsessivpronomenDeklination>d;
+}
+export class Possessivpronomen extends Flexion {
+    static fixPossessivpronomen:string[] = [
+        "{{Deutsch Possessivpronomen|mein}}",
+        "{{Deutsch Possessivpronomen|dein}}",
+        "{{Deutsch Possessivpronomen|sein}}"
+    ];
+
+    attributiv:ProsessivpronomenDeklination;
+    nichtAttributiv:ProsessivpronomenDeklination;
+    nichtAttributivMitArtikel: ProsessivpronomenDeklination;
+
+    constructor(person:string) {
+        super();
+        if (person === "mein" || person==="dein" || person === "sein") {
+            this.attributiv = mapTemplate(person, attributivT);
+            this.nichtAttributiv = mapTemplate(person, nichtAttributivT);
+            this.nichtAttributivMitArtikel = mapTemplate(person, nichtAttributivMitArtikelT);
+        } else {
+            throw new Error(`Unknow person '${person}' of Possessivpronomen`);
+        }
+    }
+}
 
 /**
  * Doku: https://de.wiktionary.org/wiki/Vorlage:Deutsch_Verb_%C3%9Cbersicht
@@ -514,9 +558,6 @@ export class VerbFlexion extends Flexion {
 
     static WEITERE_KONJUGATIONEN = "Weitere_Konjugationen";
 
-    static testFlexion(title:string): boolean {
-        return title.includes((VerbFlexion.title));
-    }
 }
 
 export class AdjektivFlexion extends Flexion {
@@ -535,9 +576,6 @@ export class AdjektivFlexion extends Flexion {
     static SUPERLATIV = "Superlativ";
     static KEIN_WEITERE_FORMEN = "keine weiteren Formen";
 
-    static testFlexion(title:string): boolean {
-        return title.includes((AdjektivFlexion.title));
-    }
 }
 
 
@@ -567,14 +605,31 @@ export class Abbreviation {
     }
 }
 
-export class Sense {
-    catalog:string = "_";
-    text: string;
+export class ListItem {
+    text:string;
+    private items:ListItem[] = [];
+    parent:ListItem|undefined;
 
-    constructor(text:string, cat:string = "_") {
-        this.catalog = cat;
+    constructor(text:string, parent:ListItem|undefined = undefined) {
         this.text = text;
+        this.parent = parent;
     }
+
+    toJSON() {
+        return {text:this.text, items:this.items};
+    }
+
+    appendSubList(list:ListItem) {
+        list.parent = this;
+        this.items?.push(list);
+    }
+}
+
+
+export class Sense {
+
+    introText?:string;
+    ambiguity: ListItem[] = [];
 }
 
 export class Example {
@@ -589,36 +644,7 @@ export class Example {
 }
 
 
-/**
- * Flexion templates which have fixed content. This is just a merge from all Flexion
- * with fixed template; for now is only Personal Pronomen
- *
- * */
-export const FlexionFixTemplate:string[] =
-    PersonalpronomenFlexion.fixPersonalpromomen;
 
-/**
- * these flexions need an argument ???
- * */
-export const FlexionTemplate:string[] = ([
-    // Possessiv Pronomen
-    "{{Deutsch Possessivpronomen|mein}}",
-    "{{Deutsch Possessivpronomen|dein}}",
-    "{{Deutsch Possessivpronomen|sein}}",
-    "{{Deutsch Possessivpronomen|…}}", // what the hell
-    "{{" + SubstantivFlexion.substantiv,
-    "{{" + PersonalpronomenFlexion.title,
-    //"{{" + SubstantivFlexion.substantiv_sch, //<< TODO
-    "{{" + VornameFlexion.title + " f",
-    "{{" + VornameFlexion.title + " m",
-    //"{{" + SubstantivFlexion.nachname,
-
-    "{{" + VerbFlexion.title,
-    "{{" + AdjektivFlexion.title,
-    "{{" + ToponymFlexion.title,
-    //(TODO:)
-    // ""
-]).concat(PersonalpronomenFlexion.fixPersonalpromomen);
 
 export interface EndTeil {
     //TODO
