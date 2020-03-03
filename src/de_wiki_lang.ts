@@ -606,17 +606,17 @@ export class Abbreviation {
 }
 
 export class ListItem {
-    text:string;
+    content:string;
     private items:ListItem[] = [];
     parent:ListItem|undefined;
 
     constructor(text:string, parent:ListItem|undefined = undefined) {
-        this.text = text;
+        this.content = text;
         this.parent = parent;
     }
 
     toJSON() {
-        return {text:this.text, items:this.items};
+        return {content:this.content, items:this.items};
     }
 
     appendSubList(list:ListItem) {
