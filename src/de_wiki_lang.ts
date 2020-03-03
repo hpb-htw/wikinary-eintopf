@@ -194,7 +194,7 @@ export class Body {
     grammaticalNote?: fallbackPlaintext; // for now render as plain text
 
     //   {{Bedeutungen}}
-    sense: Sense = new Sense();
+    sense?:ListItem ;
 
     //   {{Abkürzungen}}
     abbreviations: Abbreviation[] = [];
@@ -623,14 +623,17 @@ export class ListItem {
         list.parent = this;
         this.items?.push(list);
     }
+    lastChild():ListItem|undefined {
+        return this.items[this.items.length -1];
+    }
+    getItems() {
+        return Array.from(this.items);
+    }
+
 }
 
 
-export class Sense {
 
-    introText?:string;
-    ambiguity: ListItem[] = [];
-}
 
 export class Example {
     ofSense:number[] = [];
