@@ -9,7 +9,7 @@ all: main test
 main: $(MAIN)
 
 $(MAIN): $(SRC_TS)
-	npy tsc -p ./
+	npx tsc -p ./
 
 .PHONY:test
 test: $(SRC_TS) $(TEST_TS)
