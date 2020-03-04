@@ -6,14 +6,23 @@ branches:
     - master
 
 install:
+  - echo 'Install typescript'
   - npm install -g typescript
+  - echo 'install binary dxtaionary-db'
+  - git clone https://github.com/hpb-htw/dxtionary-db.git ../dxtionary-db
+  - CWD=`pwd`
+  - cd ../dxtionary-db && git checkout bin
+  - cd $CWD
+
 
 
 build:
   verbosity: detailed
 
 build_script:
-  - make refresh main
+  - make refresh all
+
+
 
 on_success:
   - echo "Done"

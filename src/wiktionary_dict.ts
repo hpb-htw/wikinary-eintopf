@@ -14,9 +14,9 @@ const SQL_SELECT = {
         SELECT id, title, text, editdist3(title, @word) as ranke 
         FROM dewiktionary 
         WHERE ranke < 400 
-        ORDER BY ranke 
+        ORDER BY ranke
         LIMIT 5
-    ) SELECT id, title, text FROM entry; `.replace(/\s+/g, " ")
+    ) SELECT id, title, text FROM entry ORDER BY ranke, title; `.replace(/\s+/g, " ")
 };
 
 

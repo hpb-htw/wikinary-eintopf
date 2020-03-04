@@ -1,4 +1,6 @@
 lib
+bin
+test-data/*.sqlite
 node_modules
 coverage
 big-file

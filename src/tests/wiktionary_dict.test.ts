@@ -7,8 +7,8 @@ import { chomp } from "../process_stream_helper";
 import {writeFileSync} from "fs";
 
 const WIKI_DICT_CONFIG = {
-    executable : path.resolve(__dirname, "../../../dxtionary-db/clang-build/src/dxtionary-db"),
-    database: path.resolve(__dirname, "../../../big-file/dict.sqlite"),
+    executable : path.resolve(__dirname, `../../bin/Linux-x86_64/dxtionary-db`),
+    database:    path.resolve(__dirname, "../../test-data/dict.sqlite"),
 };
 
 class EntryCounter implements EntryFormatter<string> {
@@ -98,7 +98,7 @@ test ("Query a text to JSON", async () => {
     try{
         let result:string[] = await dict.typedQuery("ich", new EntryTitleToArray());
         console.log(result);
-        expect(result).toStrictEqual([ 'ich', 'mich', 'sich', 'dich', 'nich' ]);
+        expect(result).toStrictEqual([ 'ich', 'dich', 'mich', 'nich', 'sich' ]);
     }catch(ex) {
         fail(ex);
     }
@@ -127,7 +127,7 @@ test("collect only title", async () =>{
     let sql = `SELECT title FROM dewiktionary ORDER BY title LIMIT 50;`;
     try{
         let lines = await executeSql2(executable, [dbPath, sql], linesToTitle);
-        expect(lines).toHaveLength(50);
+        expect(lines).toHaveLength(9);
     }catch(ex) {
         throw ex;
     }
