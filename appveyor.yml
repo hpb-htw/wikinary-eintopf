@@ -11,7 +11,7 @@ branches:
 
 install:
   - echo 'Install newer node'
-  - sudo aptitude update && sudo aptitude upgrade
+  - sudo apt-get update && sudo apt-get upgrade
   - node --version
   - nodejs --version
   - npm install -g typescript
