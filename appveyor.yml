@@ -1,0 +1,24 @@
+image:
+  - Ubuntu1804
+
+branches:
+  only:
+    - master
+
+install:
+  - sudo npm install -g typescript
+
+
+build:
+  verbosity: detailed
+
+build_script:
+  - make refresh install bin
+
+on_success:
+  - echo "Done"
+  - pwd
+  
+
+
+
