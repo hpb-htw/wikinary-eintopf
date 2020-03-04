@@ -6,7 +6,7 @@ branches:
     - master
 
 install:
-  - sudo npm install -g typescript
+  - npm install -g typescript
 
 
 build:
@@ -18,7 +18,7 @@ build_script:
 on_success:
   - echo "Done"
   - pwd
-  
+
 
 
 
