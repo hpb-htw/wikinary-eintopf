@@ -11,7 +11,7 @@ module.exports =  {
         "json",
         "node"
     ],
-
+    testTimeout: Number.MAX_SAFE_INTEGER,
     "collectCoverage": true,
     "coverageReporters": ["text","json", "lcov"],
     "coverageDirectory": "coverage"
