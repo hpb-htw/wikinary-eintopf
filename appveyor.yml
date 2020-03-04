@@ -9,7 +9,7 @@ install:
   - echo 'Install newer node'
   - sudo apt-get -y purge node* npm*
   - curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
-  - sudo apt-get install -y nodejs npm
+  - sudo apt-get install -y nodejs
   - echo 'Install typescript'
   - node --version
   - npm install -g typescript
