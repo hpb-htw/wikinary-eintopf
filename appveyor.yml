@@ -12,7 +12,6 @@ branches:
 install:
   - echo 'Install newer node'
   - sh: nvm install $nodejs_version
-  - sudo apt-get update && sudo apt-get upgrade -y
   - node --version
   - nodejs --version
   - npm install -g typescript
