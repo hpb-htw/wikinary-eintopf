@@ -11,5 +11,5 @@ module.exports =  {
         "json",
         "node"
     ],
-    testTimeout: 20000
+    testTimeout: Number.MAX_SAFE_INTEGER
 };
