@@ -8,11 +8,7 @@ branches:
 install:
   - echo 'Install typescript'
   - npm install -g typescript
-  - echo 'install binary dxtaionary-db'
-  - git clone https://github.com/hpb-htw/dxtionary-db.git ../dxtionary-db
-  - CWD=`pwd`
-  - cd ../dxtionary-db && git checkout bin
-  - cd $CWD
+  
 
 
 
@@ -27,6 +23,9 @@ build_script:
 on_success:
   - echo "Done"
   - pwd
+  - make coverage/lcov.info
+  - ls coverage
+  - bash <(curl -s https://codecov.io/bash) -f  coverage/lcov.info
 
 
 

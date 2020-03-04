@@ -10,5 +10,9 @@ module.exports =  {
         "jsx",
         "json",
         "node"
-    ]
+    ],
+
+    "collectCoverage": true,
+    "coverageReporters": ["text","json", "lcov"],
+    "coverageDirectory": "coverage"
 };

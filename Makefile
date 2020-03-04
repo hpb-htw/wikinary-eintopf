@@ -48,6 +48,11 @@ $(SMALL_DICT_SQLITE): $(IMPORT_RAW_DICT) $(SMALL_CSV_GZ)
 	rm -f $(SMALL_DICT_SQLITE)
 	$(IMPORT_RAW_DICT) $(SMALL_DICT_SQLITE) $(SMALL_CSV_GZ)
 
+
+coverage/lcov.info:
+	npx jest --config jest-covery.config.js
+
+
 .PHONY:clean
 clean:
 	rm -rf lib
