@@ -13,7 +13,7 @@ build:
   verbosity: detailed
 
 build_script:
-  - make refresh install bin
+  - make refresh all
 
 on_success:
   - echo "Done"
