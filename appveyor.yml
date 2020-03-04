@@ -13,7 +13,7 @@ build:
   verbosity: detailed
 
 build_script:
-  - make refresh all
+  - make refresh main
 
 on_success:
   - echo "Done"
