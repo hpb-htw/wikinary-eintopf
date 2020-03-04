@@ -55,9 +55,10 @@ coverage/lcov.info:
 
 .PHONY:clean
 clean:
-	rm -rf lib
+	rm -rf lib $(BIN_DIR) $(SMALL_DICT_SQLITE)
 
 .PHONY: refresh
 refresh:
+	make clean
 	rm -rf ./node_modules ./package-lock.json
 	npm install
