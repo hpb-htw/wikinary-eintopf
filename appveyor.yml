@@ -14,6 +14,7 @@ install:
   - sh: nvm install $nodejs_version
   - node --version
   - nodejs --version
+  - npx envinfo --preset jest
   - npm install -g typescript
 
 build:

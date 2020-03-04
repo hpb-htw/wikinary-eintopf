@@ -1,3 +1,8 @@
+##### CONFIGURATION ####
+JEST        = npx jest
+JEST_OPT    = --maxWorkers=2
+
+#### Target ####
 MAIN=lib/index.js
 SRC_TS=$(wildcard src/*.ts)
 TEST_TS=$(wildcard src/tests/*.ts)
@@ -24,7 +29,7 @@ $(MAIN): $(SRC_TS)
 
 .PHONY:test
 test: $(SRC_TS) $(TEST_TS) $(DXTIONARY_DB) $(SMALL_DICT_SQLITE)
-	npx jest --config jest.config.js
+	$(JEST) $(JEST_OPT)  --config jest.config.js
 
 
 $(DXTIONARY_DB):
@@ -50,7 +55,7 @@ $(SMALL_DICT_SQLITE): $(IMPORT_RAW_DICT) $(SMALL_CSV_GZ)
 
 
 coverage/lcov.info:
-	npx jest --config jest-covery.config.js
+	$(JEST) $(JEST_OPT) --config jest-covery.config.js
 
 
 .PHONY:clean
