@@ -8,7 +8,7 @@ branches:
 install:
   - echo 'Install typescript'
   - npm install -g typescript
-  
+
 
 
 

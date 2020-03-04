@@ -132,7 +132,7 @@ async function executeSql<T>(sqlite3CliCmd: string, sqlite3Argv: string[], fmt: 
         await collectLines(chunksToLines(source.stderr), lineAcc);
         let exit = await onExit(source);
     }catch(ex) { // catch error from process
-        let messageObj = {exit: Number.parseInt(ex.message), stderr: errorMsg};
+        let messageObj = {exit: Number.parseInt(ex.message), stderr: errorMsg, stack:ex.stack};
         throw Error(JSON.stringify(messageObj));
     }
     return Promise.resolve(fmt.serialize());
