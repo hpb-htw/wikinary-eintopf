@@ -1,3 +1,7 @@
+# Test against the latest version of this Node.js version
+environment:
+  nodejs_version: "13"
+
 image:
   - Ubuntu1804
 
@@ -7,13 +11,10 @@ branches:
 
 install:
   - echo 'Install newer node'
-  - sudo apt-get -y purge node* npm*
-  - curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
-  - sudo apt-get install -y nodejs
-  - echo 'Install typescript'
+  - sudo aptitude update && sudo aptitude upgrade
   - node --version
+  - nodejs --version
   - npm install -g typescript
-
 
 build:
   verbosity: detailed
