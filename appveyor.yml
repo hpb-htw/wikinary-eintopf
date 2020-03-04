@@ -7,7 +7,7 @@ branches:
 
 install:
   - echo 'Install newer node'
-  - sudo apt-get purge node
+  - sudo apt-get purge nodejs
   - curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
   - sudo apt-get install -y nodejs
   - echo 'Install typescript'
