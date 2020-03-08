@@ -7,6 +7,7 @@
 	"files": [
 		"lib/**/*"
 	],
+	"bin": "./lib/wikinary.js",
 	"scripts": {
 		"compile": "make all",
 		"clean": "make clean",
@@ -28,6 +29,7 @@
 		"jest": "^25.1.0",
 		"ts-jest": "^25.2.1",
 		"ts-node": "^8.5.4",
+		"tsconfig-paths": "^3.9.0",
 		"tslint": "^5.20.0",
 		"typescript": "^3.8.2"
 	},

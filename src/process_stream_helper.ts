@@ -1,4 +1,7 @@
 import { ChildProcess } from "child_process";
+import { platform, arch } from 'os';
+import {join} from 'path';
+import { existsSync } from 'fs';
 
 /**
  * Unverschämt geklaut von 
@@ -50,4 +53,40 @@ export function onExit(childProcess: ChildProcess): Promise<undefined|Error> {
             reject(err);
         });
     });
+}
+
+
+export function getExecutablePath(binaryPath: string, binName:string): string {
+    let plat = platform();
+    let os_arch = arch();
+    let sqliteBin: string;
+
+    switch (plat) {
+        case 'win32':
+            sqliteBin = `Windows-AMD64/${binName}.exe`;
+            break;
+        case 'linux':
+            if (os_arch === 'x64') {
+                sqliteBin = `Linux-x86_64/${binName}`;
+            } else {
+                sqliteBin = '';
+            }
+            break;
+        case 'darwin':
+            sqliteBin = `Darwin-x86_64/${binName}`;
+            break;
+        default:
+            sqliteBin = '';
+            break;
+    }
+    if (sqliteBin) {
+        let path = join(binaryPath, 'bin', sqliteBin);
+        if ( existsSync(path)) {
+            return path;
+        } else {
+            throw new Error(`Binary not found: '${path}' does not exist.`);
+        }
+    } else {
+        throw new Error(`No support for platform ${plat} and architecture ${arch}`);
+    }
 }

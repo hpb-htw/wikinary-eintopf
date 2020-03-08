@@ -6,6 +6,7 @@ JEST_OPT    = --maxWorkers=2
 MAIN=lib/index.js
 SRC_TS=$(wildcard src/*.ts)
 TEST_TS=$(wildcard src/tests/*.ts)
+PROFILES_FILE=wikinary.cpuprofile
 
 # executable binary
 BIN_DIR         =bin
@@ -58,9 +59,13 @@ coverage/lcov.info:
 	$(JEST) $(JEST_OPT) --config jest-covery.config.js
 
 
+profiling:
+	node -r ts-node/register -r tsconfig-paths --inspect ./src/wikinary.ts
+	# --cpu-prof --cpu-prof-name=$(PROFILES_FILE)
+
 .PHONY:clean
 clean:
-	rm -rf lib $(BIN_DIR) $(SMALL_DICT_SQLITE)
+	rm -rf lib $(BIN_DIR) $(SMALL_DICT_SQLITE) $(PROFILES_FILE)
 
 .PHONY: refresh
 refresh:
