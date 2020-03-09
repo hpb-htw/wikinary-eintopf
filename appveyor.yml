@@ -15,7 +15,6 @@ install:
   - echo 'Install newer node'
   - sh: nvm install $nodejs_version
   - node --version
-  - nodejs --version
   - npx envinfo --preset jest
   - npm install -g typescript
 
