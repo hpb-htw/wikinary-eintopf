@@ -4,6 +4,8 @@ environment:
 
 image:
   - Ubuntu1804
+  - macos
+  - Visual Studio 2019
 
 branches:
   only:
