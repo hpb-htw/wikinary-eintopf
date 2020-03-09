@@ -60,7 +60,7 @@ coverage/lcov.info:
 
 
 profiling:
-	node -r ts-node/register -r tsconfig-paths --inspect ./src/wikinary.ts
+	node -r ts-node/register -r tsconfig-paths --cpu-prof --cpu-prof-name=$(PROFILES_FILE) ./src/wikinary.ts
 	# --cpu-prof --cpu-prof-name=$(PROFILES_FILE)
 
 .PHONY:clean
