@@ -2,7 +2,7 @@ import {resolve} from "path";
 import {WikiDictionary, EntryFormatter, getExecutablePath, Entry} from "./index";
 
 const bin = {
-    dxtinary: getExecutablePath('./', 'dxtionary-db'),
+    dxtionary: getExecutablePath('./', 'dxtionary-db'),
     dict: resolve('../big-file/dict.sqlite')
 };
 
@@ -12,7 +12,11 @@ class JSONFormater implements EntryFormatter<any[]> {
     count:number = 0;
 
     accumulate(e: Entry): void {
-        this.data.push (JSON.parse(e.text));
+        try {
+            this.data.push(JSON.parse(e.text));
+        }catch (ex) {
+            console.log(e);
+        }
     }
 
     serialize():any[]{
@@ -20,13 +24,32 @@ class JSONFormater implements EntryFormatter<any[]> {
     }
 }
 
-async function singleMain() {
+/*
+async function singleSyncMain() {
     let dict = new WikiDictionary(bin.dxtinary, bin.dict);
     let word = "Hallo";
-    let result = await dict.typedQuery(word, new JSONFormater());
+    let result = dict.syncTypedQuery(word, new JSONFormater());
     console.log(result.length);
 }
-singleMain();
+singleSyncMain();
+*/
+
+
+async function syncMain() {
+    let dict = new WikiDictionary(bin.dxtionary, bin.dict);
+    let words:string[] = ['Anthropologie', 'Rosa', 'gehen', 'weil', 'sein', 'haben'];
+    const max = 100, LENGTH = words.length;
+    let count:number[] = [];
+    for(let i = 0; i < max; ++i){
+        let word = words[i % LENGTH];
+        let result = dict.syncTypedQuery(word, new JSONFormater());
+        count.push(result.length);
+        //console.log(i);
+    }
+    console.log(count.length);
+}
+
+syncMain();
 
 /*
 async function main() {

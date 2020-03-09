@@ -2,7 +2,7 @@
  * implement a dictionary to represent wiktionary
 */
 import { Entry, EntryFormatter, Dictionary, idMap } from "./dictionary";
-import { spawn} from 'child_process';
+import { spawn, spawnSync } from 'child_process';
 import { chunksToLines, chomp, onExit } from "./process_stream_helper";
 import { escapeString } from "./sql_escape_string";
 
@@ -53,6 +53,13 @@ export class WikiDictionary implements Dictionary {
         return executeSql(this.dxtionaryExecutableCli, sqliteArgv, formatter);
     }
 
+    syncTypedQuery<T>(word:string, formatter:EntryFormatter<T>): T {
+        let escapeWord = plainEscape(word);
+        const selectCmd = SQL_SELECT.byTitle.replace("@word", escapeWord);
+        const sqliteArgv: string[] = [this.dbPath, selectCmd];
+        return syncExecuteSql(this.dxtionaryExecutableCli, sqliteArgv, formatter);
+    }
+
     save(entry: Entry): Promise<any> {
         throw new Error("Method not implemented.");
     }
@@ -60,35 +67,11 @@ export class WikiDictionary implements Dictionary {
     saveAll(entries: Entry[]): Promise<number> {
         throw new Error("Method not implemented.");
     }
-
+/*
     close(): Promise<any> {
         return Promise.resolve(`disconnect to database`);
     }
-}
-
-export async function executeSql2<R>(
-            sqlite3CliCmd: string, 
-            sqlite3Argv: string[], 
-            stdoutCapture: (lines: AsyncIterable<string>) => Promise<R> 
-): Promise<R> {
-    const source = spawn(sqlite3CliCmd, sqlite3Argv, {
-        stdio: ['ignore', 'pipe', 'pipe']
-    });
-    let errorMsg = "";
-    try {
-        // capture std out
-        let capturedLines = await stdoutCapture(chunksToLines(source.stdout));
-        // capture std err
-        const lineAcc = (l:string) => {        
-            errorMsg += l;
-        };
-        await collectLines(chunksToLines(source.stderr), lineAcc);
-        let exit = await onExit(source);
-        return Promise.resolve(capturedLines);
-    }catch (ex) {
-        let messageObj = {exit: Number.parseInt(ex.message), stderr: errorMsg};
-        throw Error(JSON.stringify(messageObj));
-    }    
+ */
 }
 
 class PlainTextFormatter implements EntryFormatter<string> {
@@ -112,6 +95,57 @@ function plainEscape(word: string): string {
 function likeEscape(word: string): string {
     return escapeString(`%${word}%`);
 }
+
+export async function executeSql2<R>(
+    sqlite3CliCmd: string,
+    sqlite3Argv: string[],
+    stdoutCapture: (lines: AsyncIterable<string>) => Promise<R>
+): Promise<R> {
+    const source = spawn(sqlite3CliCmd, sqlite3Argv, {
+        stdio: ['ignore', 'pipe', 'pipe']
+    });
+    let errorMsg = "";
+    try {
+        // capture std out
+        let capturedLines = await stdoutCapture(chunksToLines(source.stdout));
+        // capture std err
+        const lineAcc = (l:string) => {
+            errorMsg += l;
+        };
+        await collectLines(chunksToLines(source.stderr), lineAcc);
+        let exit = await onExit(source);
+        return Promise.resolve(capturedLines);
+    }catch (ex) {
+        let messageObj = {exit: Number.parseInt(ex.message), stderr: errorMsg};
+        throw Error(JSON.stringify(messageObj));
+    }
+}
+
+function syncExecuteSql<T>(sqlite3CliCmd: string, sqlite3Argv: string[], fmt: EntryFormatter<T> ): T {
+    const stdout = spawnSync(sqlite3CliCmd, sqlite3Argv, {
+        stdio: ['ignore', 'pipe', 'pipe'],
+        maxBuffer: 2 * 1024 * 1024,
+        encoding: "utf8"
+    });
+    return syncLineToEntries( stdout.stdout.split('\n'), fmt );
+}
+
+function syncLineToEntries<T>(lines:string[], fmt:EntryFormatter<T>): T {
+    function cacheToEntry(id:string, title:string, text:string):Entry {
+        return {
+            id:Number.parseInt( trimHead(id) ),
+            title: chomp( trimHead( title) ),
+            text: trimHead( text )
+        };
+    }
+    const LENGTH = lines.length-4;
+    for (let i = 0; i < LENGTH; i = i+4) {
+        let e:Entry = cacheToEntry( lines[i], lines[i+1], lines[i+2] );
+        fmt.accumulate(e);
+    }
+    return fmt.serialize();
+}
+
 
 async function executeSql<T>(sqlite3CliCmd: string, sqlite3Argv: string[], fmt: EntryFormatter<T> ) :Promise<T> {
     const source = spawn(sqlite3CliCmd, sqlite3Argv, {

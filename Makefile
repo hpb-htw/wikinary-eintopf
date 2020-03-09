@@ -7,6 +7,7 @@ MAIN=lib/index.js
 SRC_TS=$(wildcard src/*.ts)
 TEST_TS=$(wildcard src/tests/*.ts)
 PROFILES_FILE=wikinary.cpuprofile
+JS_PROFILES_FILE=wikinary-js.cpuprofile
 
 # executable binary
 BIN_DIR         =bin
@@ -20,7 +21,7 @@ SMALL_DICT_SQLITE  = $(DATA_DIR)/dict.sqlite
 
 
 .PHONY:all
-all: main test
+all: main test coverage/lcov.info
 
 .PHONY:main
 main: $(MAIN)
@@ -61,7 +62,9 @@ coverage/lcov.info:
 
 profiling:
 	node -r ts-node/register -r tsconfig-paths --cpu-prof --cpu-prof-name=$(PROFILES_FILE) ./src/wikinary.ts
-	# --cpu-prof --cpu-prof-name=$(PROFILES_FILE)
+	
+jsprofiling:
+	node --cpu-prof --cpu-prof-name=$(JS_PROFILES_FILE) ./lib/wikinary.js
 
 .PHONY:clean
 clean:

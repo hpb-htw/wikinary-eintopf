@@ -41,7 +41,7 @@ export interface Dictionary {
      * @returns a Promiss, expected to be resolved if sussess, or rejected of closing dictionary 
      * causes problems.
      */
-    close(): Promise<any>;
+    //close(): Promise<any>;
     
 }
 
