@@ -3,7 +3,6 @@ environment:
   nodejs_version: "13"
 
 image:
-  - Ubuntu1804
   - macos
   - Visual Studio 2019
 
@@ -24,13 +23,5 @@ build:
 build_script:
   - make refresh all
 
-
-
-on_success:
-  - echo "Done"
-  - pwd
-  - make coverage/lcov.info
-  - ls coverage
-  - bash <(curl -s https://codecov.io/bash) -f  coverage/lcov.info
 
 
