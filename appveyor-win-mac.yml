@@ -4,7 +4,6 @@ environment:
 
 image:
   - macos
-  - MinGW-w64
 
 branches:
   only:
