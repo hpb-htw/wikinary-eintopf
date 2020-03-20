@@ -1,6 +1,6 @@
 ##### CONFIGURATION ####
 JEST        = npx jest
-JEST_OPT    = --maxWorkers=2
+JEST_OPT    = --maxWorkers=1
 
 #### Target ####
 MAIN=lib/index.js
