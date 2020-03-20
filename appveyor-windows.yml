@@ -1,0 +1,36 @@
+# Test against the latest version of this Node.js version
+environment:
+  nodejs_version: "13"
+
+image:
+  - Ubuntu1804
+  - macos
+  - Visual Studio 2019
+
+branches:
+  only:
+    - master
+
+install:
+  - echo 'Install newer node'
+  - sh: nvm install $nodejs_version
+  - node --version
+  - npx envinfo --preset jest
+  - npm --no-optional install -g typescript
+
+build:
+  verbosity: detailed
+
+build_script:
+  - make refresh all
+
+
+
+on_success:
+  - echo "Done"
+  - pwd
+  - make coverage/lcov.info
+  - ls coverage
+  - bash <(curl -s https://codecov.io/bash) -f  coverage/lcov.info
+
+
