@@ -21,7 +21,7 @@ build:
   verbosity: detailed
 
 build_script:
-  - make refresh all
+  - make refresh main test
 
 
 
