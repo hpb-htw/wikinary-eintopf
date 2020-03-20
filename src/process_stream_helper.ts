@@ -56,7 +56,7 @@ export function onExit(childProcess: ChildProcess): Promise<undefined|Error> {
 }
 
 
-export function getExecutablePath(binaryPath: string, binName:string): string {
+export function getExecutablePath(binaryDirectory: string, binName:string): string {
     let plat = platform();
     let os_arch = arch();
     let sqliteBin: string;
@@ -80,7 +80,7 @@ export function getExecutablePath(binaryPath: string, binName:string): string {
             break;
     }
     if (sqliteBin) {
-        let path = join(binaryPath, 'bin', sqliteBin);
+        let path = join(binaryDirectory, sqliteBin);
         if ( existsSync(path)) {
             return path;
         } else {

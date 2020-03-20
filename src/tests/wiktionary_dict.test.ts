@@ -2,12 +2,19 @@ import * as path from "path";
 
 import {WikiDictionary, executeSql2, trimHead} from "../wiktionary_dict";
 import {Entry, EntryFormatter} from "../dictionary";
-import { chomp } from "../process_stream_helper";
+import {chomp, getExecutablePath} from "../process_stream_helper";
 
 import {writeFileSync} from "fs";
 
+/*
 const WIKI_DICT_CONFIG = {
     executable : path.resolve(__dirname, `../../bin/Linux-x86_64/dxtionary-db`),
+    database:    path.resolve(__dirname, "../../test-data/dict.sqlite"),
+};
+*/
+
+const WIKI_DICT_CONFIG = {
+    executable : getExecutablePath(path.resolve(__dirname, `../../bin/`), 'dxtionary-db'),
     database:    path.resolve(__dirname, "../../test-data/dict.sqlite"),
 };
 

@@ -16,7 +16,7 @@ install:
   - sh: nvm install $nodejs_version
   - node --version
   - npx envinfo --preset jest
-  - npm install -g typescript
+  - npm --no-optional install -g typescript
 
 build:
   verbosity: detailed
