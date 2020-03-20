@@ -30,14 +30,14 @@ ifeq ($(OS),Windows_NT)
 else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
-        EXECUTE_DIR +=Linux-
+        EXECUTE_DIR +=Linux-x86_64
     endif
     ifeq ($(UNAME_S),Darwin)
-        EXECUTE_DIR +=Darwin-
+        EXECUTE_DIR +=Darwin-x86_64
     endif
     UNAME_P := $(shell uname -p)
     ifeq ($(UNAME_P),x86_64)
-        EXECUTE_DIR +=x86_64
+        #Not support EXECUTE_DIR +=x86_64
     endif
     ifneq ($(filter %86,$(UNAME_P)),)
         #Not suported
