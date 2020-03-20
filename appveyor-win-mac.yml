@@ -4,7 +4,7 @@ environment:
 
 image:
   - macos
-  - Visual Studio 2019
+  - MinGW-w64
 
 branches:
   only:

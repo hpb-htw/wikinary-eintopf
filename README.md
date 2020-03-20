@@ -1,5 +1,9 @@
 # Wikinary Eintopf
 
+linux: [![Build status](https://ci.appveyor.com/api/projects/status/pjhs5kg6qfxmq2s3?svg=true)](https://ci.appveyor.com/project/hpb-htw/wikinary-eintopf)
+macos: [![Build status](https://ci.appveyor.com/api/projects/status/jtylo6n725sif98q?svg=true)](https://ci.appveyor.com/project/hpb-htw/wikinary-eintopf-macos)
+
+
 Tool to convert CSV Version of the German Wiktionary dump file to Sqlite database –
 A Complement for the Visual Studio Code Extension „dxtionary“ extension.
 
