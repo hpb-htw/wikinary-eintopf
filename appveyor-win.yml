@@ -1,0 +1,27 @@
+# Test against the latest version of this Node.js version
+environment:
+  nodejs_version: "13"
+
+image:
+  -  Visual Studio 2019
+
+branches:
+  only:
+    - master
+
+install:
+  - echo 'Install newer node'
+  - sh: nvm install $nodejs_version
+  - node --version
+  - npx envinfo --preset jest
+  - npm --no-optional install -g typescript
+
+build:
+  verbosity: detailed
+
+build_script:
+  - echo %PATH%
+  - make refresh main test
+
+
+
