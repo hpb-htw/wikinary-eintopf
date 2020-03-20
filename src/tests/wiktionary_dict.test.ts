@@ -97,7 +97,7 @@ test ("Query a text to JSON", async () => {
     //dict.formatter = new JSONStringFormatter();
     try{
         let result:string[] = await dict.typedQuery("ich", new EntryTitleToArray());
-        console.log(result);
+        //console.log(result);
         expect(result).toStrictEqual([ 'ich', 'dich', 'mich', 'nich', 'sich' ]);
     }catch(ex) {
         fail(ex);

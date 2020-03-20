@@ -1,6 +1,6 @@
 ##### CONFIGURATION ####
 JEST        = npx jest
-JEST_OPT    = --maxWorkers=1
+JEST_OPT    = --maxWorkers=4 --no-colors --no-cache --no-watchman
 
 #### Target ####
 MAIN=lib/index.js
@@ -69,7 +69,7 @@ $(MAIN): $(SRC_TS)
 
 .PHONY:test
 test: $(SRC_TS) $(TEST_TS) $(DXTIONARY_DB) $(SMALL_DICT_SQLITE)
-	$(JEST) $(JEST_OPT)  --config jest.config.js
+	$(JEST) $(JEST_OPT) --config jest.config.js
 
 
 $(DXTIONARY_DB):
@@ -103,6 +103,10 @@ profiling:
 	
 jsprofiling:
 	node --cpu-prof --cpu-prof-name=$(JS_PROFILES_FILE) ./lib/wikinary.js
+
+.PHONY:debug
+debug:
+	node --inspect-brk node_modules/.bin/jest -runInBand $(JETS_OPT) --config jest.config.js
 
 .PHONY:clean
 clean:
