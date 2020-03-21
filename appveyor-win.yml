@@ -21,6 +21,7 @@ build:
 
 build_script:
   - echo %PATH%
+  - choco install make -y
   - make refresh main test
 
 
