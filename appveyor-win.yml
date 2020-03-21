@@ -22,6 +22,7 @@ build:
 build_script:
   - echo %PATH%
   - choco install cygwin
+  - refreshenv
   - make --file=Makefile.win refresh main test
 
 
