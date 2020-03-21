@@ -20,8 +20,8 @@ build:
   verbosity: detailed
 
 build_script:
+  - setx PATH "%PATH%;c:\MinGW\bin"
   - echo %PATH%
-  - choco install make -y
   - make refresh main test
 
 
