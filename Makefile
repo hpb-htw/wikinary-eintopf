@@ -11,40 +11,24 @@ JS_PROFILES_FILE=wikinary-js.cpuprofile
 
 # executable binary
 BIN_DIR         =bin
-#DXTIONARY_DB    =bin/Linux-x86_64/dxtionary-db
-#IMPORT_RAW_DICT =bin/Linux-x86_64/import-raw-dict
 
 EXECUTE_DIR     :=$(BIN_DIR)/
-ifeq ($(OS),Windows_NT)
-    EXECUTE_DIR +=Windows-
-    ifeq ($(PROCESSOR_ARCHITEW6432),AMD64)
-        EXECUTE_DIR +=AMD64
-    else
-        ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
-            EXECUTE_DIR +=AMD64
-        endif
-        ifeq ($(PROCESSOR_ARCHITECTURE),x86)
-            #Not suported
-        endif
-    endif
-else
-    UNAME_S := $(shell uname -s)
-    ifeq ($(UNAME_S),Linux)
-        EXECUTE_DIR +=Linux-x86_64
-    endif
-    ifeq ($(UNAME_S),Darwin)
-        EXECUTE_DIR +=Darwin-x86_64
-    endif
-    UNAME_P := $(shell uname -p)
-    ifeq ($(UNAME_P),x86_64)
-        #Not support EXECUTE_DIR +=x86_64
-    endif
-    ifneq ($(filter %86,$(UNAME_P)),)
-        #Not suported
-    endif
-    ifneq ($(filter arm%,$(UNAME_P)),)
-        #Not suported
-    endif
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	EXECUTE_DIR +=Linux-x86_64
+endif
+ifeq ($(UNAME_S),Darwin)
+	EXECUTE_DIR +=Darwin-x86_64
+endif
+UNAME_P := $(shell uname -p)
+ifeq ($(UNAME_P),x86_64)
+	#Not support EXECUTE_DIR +=x86_64
+endif
+ifneq ($(filter %86,$(UNAME_P)),)
+	#Not suported
+endif
+ifneq ($(filter arm%,$(UNAME_P)),)
+	#Not suported
 endif
 space :=
 space +=
