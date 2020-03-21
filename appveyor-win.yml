@@ -20,9 +20,9 @@ build:
   verbosity: detailed
 
 build_script:
-  - set PATH=C:\MinGW\bin;%PATH%
   - echo %PATH%
-  - make refresh main test
+  - choco install cygwin
+  - make --file=Makefile.win refresh main test
 
 
 
