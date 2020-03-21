@@ -83,10 +83,10 @@ bin:
 	@echo "+======================================================+"
 	@echo "* Make sure to deploy project dxtionary-db in AppVoyer *"
 	@echo "+======================================================+"
-	curl -L -o /tmp/Release.tar.gz https://github.com/hpb-htw/dxtionary-db/raw/bin/bin/Release.tar.gz
+	curl -L -o Release.tar.gz https://github.com/hpb-htw/dxtionary-db/raw/bin/bin/Release.tar.gz
 	@mkdir -p $(BIN_DIR)
-	tar xfz /tmp/Release.tar.gz -C $(BIN_DIR) --strip 1
-	rm -f /tmp/Release.tar.gz
+	tar xfz Release.tar.gz -C $(BIN_DIR) --strip 1
+	rm -f Release.tar.gz
 	chmod +x $(DXTIONARY_DB) $(IMPORT_RAW_DICT)
 
 $(SMALL_DICT_SQLITE): $(IMPORT_RAW_DICT) $(SMALL_CSV_GZ)
