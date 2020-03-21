@@ -24,7 +24,7 @@ build_script:
   - choco install cygwin --yes
   - choco install cyg-get --yes
   - refreshenv
-  - cyg-get --help
+  - cyg-get -help
   - make --file=Makefile.win refresh main test
 
 
