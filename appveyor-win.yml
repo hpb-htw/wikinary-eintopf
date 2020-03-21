@@ -20,7 +20,7 @@ build:
   verbosity: detailed
 
 build_script:
-  - set PATH="C:\MinGW\bin"
+  - set PATH=C:\MinGW\bin;%PATH%
   - echo %PATH%
   - make refresh main test
 
