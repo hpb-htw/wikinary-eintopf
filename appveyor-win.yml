@@ -11,7 +11,7 @@ branches:
 
 install:
   - echo 'Install newer node'
-  - nvm install $nodejs_version
+  - ps: Install-Product node $env:nodejs_version
   - node --version
   - npx envinfo --preset jest
   - npm --no-optional install -g typescript
