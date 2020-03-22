@@ -24,6 +24,6 @@ build_script:
   - choco install make --yes
   - refreshenv
   - make --help
-
+  - make --file=Notexist.win
 
 
