@@ -47,9 +47,11 @@ bin:
 	@echo "+======================================================+"
 	curl -L -o Release.tar.gz https://github.com/hpb-htw/dxtionary-db/raw/bin/bin/Release.tar.gz
 	@mkdir -p $(BIN_DIR)
-	7z e Release.tar.gz
-	7z e Release.tar -obin\Windows-AMD64 *.exe -r
-	dir 
+	#7z e Release.tar.gz
+	#7z e Release.tar -obin\Windows-AMD64 *.exe -r
+	tar xfz Release.tar.gz -C $(BIN_DIR) --strip 1
+	rm -f Release.tar.gz
+	dir
 
 
 
