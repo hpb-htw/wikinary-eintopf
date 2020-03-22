@@ -50,7 +50,7 @@ bin:
 	7z e Release.tar.gz
 	7z e Release.tar -obin\Windows-AMD64 *.exe -r
 	dir bin/Windows-AMD64
-	rm -f Release.tar.gz
+
 
 
 $(SMALL_DICT_SQLITE): $(IMPORT_RAW_DICT) $(SMALL_CSV_GZ)
