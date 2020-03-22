@@ -11,8 +11,8 @@ JS_PROFILES_FILE=wikinary-js.cpuprofile
 
 # executable binary
 BIN_DIR         =bin
-DXTIONARY_DB    =$(BIN_DIR)/Linux-x86_64/dxtionary-db
-IMPORT_RAW_DICT =$(BIN_DIR)/Linux-x86_64/import-raw-dict
+DXTIONARY_DB    =$(BIN_DIR)/Windows-AMD64/dxtionary-db
+IMPORT_RAW_DICT =$(BIN_DIR)/Windows-AMD64/import-raw-dict
 
 # test data
 DATA_DIR           = test-data
@@ -49,10 +49,8 @@ bin:
 	@mkdir -p $(BIN_DIR)
 	#7z e Release.tar.gz
 	#7z e Release.tar -obin\Windows-AMD64 *.exe -r
-	tar xfz Release.tar.gz -C $(BIN_DIR) --strip 1
+	tar xvfz Release.tar.gz -C $(BIN_DIR) --strip 1
 	rm -f Release.tar.gz
-	dir
-
 
 
 $(SMALL_DICT_SQLITE): $(IMPORT_RAW_DICT) $(SMALL_CSV_GZ)
