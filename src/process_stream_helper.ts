@@ -1,5 +1,5 @@
 import { ChildProcess } from "child_process";
-import { platform, arch } from 'os';
+
 import {join} from 'path';
 import { existsSync } from 'fs';
 
@@ -55,18 +55,18 @@ export function onExit(childProcess: ChildProcess): Promise<undefined|Error> {
     });
 }
 
-
-export function getExecutablePath(binaryDirectory: string, binName:string): string {
-    let plat = platform();
-    let os_arch = arch();
+export type BinaryEnvironment = {
+    platform: string,
+    arch: string
+};
+export function getExecutablePath(env: BinaryEnvironment, binaryDirectory: string, binName:string): string {
     let sqliteBin: string;
-
-    switch (plat) {
+    switch ( env.platform ) {
         case 'win32':
             sqliteBin = `Windows-AMD64/${binName}.exe`;
             break;
         case 'linux':
-            if (os_arch === 'x64') {
+            if (env.arch === 'x64') {
                 sqliteBin = `Linux-x86_64/${binName}`;
             } else {
                 sqliteBin = '';
@@ -87,6 +87,6 @@ export function getExecutablePath(binaryDirectory: string, binName:string): stri
             throw new Error(`Binary not found: '${path}' does not exist.`);
         }
     } else {
-        throw new Error(`No support for platform ${plat} and architecture ${arch}`);
+        throw new Error(`No support for platform ${env.platform} and architecture ${env.arch}`);
     }
 }

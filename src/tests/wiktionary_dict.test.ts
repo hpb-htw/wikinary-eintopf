@@ -2,12 +2,17 @@ import * as path from "path";
 
 import {WikiDictionary, executeSql2, trimHead} from "../wiktionary_dict";
 import {Entry, EntryFormatter} from "../dictionary";
-import {chomp, getExecutablePath} from "../process_stream_helper";
+import {BinaryEnvironment, chomp, getExecutablePath} from "../process_stream_helper";
+import { platform, arch } from 'os';
 
-import {writeFileSync} from "fs";
+
+const BIN_ENV : BinaryEnvironment = {
+    arch: arch(),
+    platform: platform()
+};
 
 const WIKI_DICT_CONFIG = {
-    executable : getExecutablePath(path.resolve(__dirname, `../../bin/`), 'dxtionary-db'),
+    executable : getExecutablePath(BIN_ENV, path.resolve(__dirname, `../../bin/`), 'dxtionary-db'),
     database:    path.resolve(__dirname, "../../test-data/dict.sqlite"),
 };
 
