@@ -49,7 +49,7 @@ bin:
 	@mkdir -p $(BIN_DIR)
 	7z e Release.tar.gz
 	7z e Release.tar -obin\Windows-AMD64 *.exe -r
-	dir bin/Windows-AMD64
+	dir bin\Windows-AMD64
 
 
 
