@@ -35,10 +35,10 @@ test: $(SRC_TS) $(TEST_TS) $(DXTIONARY_DB) $(SMALL_DICT_SQLITE)
 
 
 $(DXTIONARY_DB):
-	$(MAKE) bin
+	$(MAKE) -f $(MAKEFILE_LIST) bin
 
 $(IMPORT_RAW_DICT):
-	$(MAKE) bin
+	$(MAKE) -f $(MAKEFILE_LIST) bin
 
 .PHONY:bin
 bin:
