@@ -1,8 +1,14 @@
 import {resolve} from "path";
 import {WikiDictionary, EntryFormatter, getExecutablePath, Entry} from "./index";
+import {BinaryEnvironment} from "./process_stream_helper";
+import {arch, platform} from "os";
 
+const BIN_ENV : BinaryEnvironment = {
+    arch: arch(),
+    platform: platform()
+};
 const bin = {
-    dxtionary: getExecutablePath('./', 'dxtionary-db'),
+    dxtionary: getExecutablePath(BIN_ENV,'./', 'dxtionary-db'),
     dict: resolve('../big-file/dict.sqlite')
 };
 
