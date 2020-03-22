@@ -68,7 +68,7 @@ test("Query a text to JSON String", async () => {
     dict.formatter = new JSONStringFormatter();
     try{
         let result = await dict.query("ich");
-        writeFileSync('/tmp/query.json', result, 'utf8');
+        //writeFileSync('/tmp/query.json', result, 'utf8');
         let resultAsJson = JSON.parse(result);
         expect(resultAsJson).toHaveLength(5);
     }catch(ex) {
