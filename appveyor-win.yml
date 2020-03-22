@@ -23,7 +23,7 @@ build_script:
   - echo %PATH%
   - choco install make --yes
   - refreshenv
-  - make --help
-  - make --file=Notexist.win
+  - make --file=Makefile.win refresh
+  - make --file=Makefile.win test
 
 
